@@ -13,21 +13,19 @@ class FriendForm extends React.Component {
       activeFriend: {}
     };
   }
-  //    handleAdd = (e) => {
-  //     e.preventDefault();
-  //     axios
-  //       .post("http://localhost:5000/friends", this.state.newFriend)
-  //       .then(res => console.log(res.data))
-  //       .catch(err => console.error(err));
-  //     this.props.history.push("/");
-  //   };
   componentDidMount() {
-    if (this.props.activeFriend.hasOwnProperty("name")) {
-      this.setState({ activeFriend: this.props.activeFriend });
-    } else {
-      this.setState({ activeFriend: { name: "", age: "", email: "" } });
+    console.log(this.props.match.params.friendId);
+    const friendId = this.props.match.params.friendId;
+    if (friendId) {
     }
   }
+  handleAdd = e => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:5000/friends", this.state.newFriend)
+      .then(res => this.props.history.push("/"))
+      .catch(err => console.error(err));
+  };
   handleChanges = e => {
     this.setState({
       newFriend: { ...this.state.newFriend, [e.target.name]: e.target.value }
@@ -37,11 +35,11 @@ class FriendForm extends React.Component {
     console.log(this.props);
     const { name, age, email } = this.state.newFriend;
     return (
-      <form onSubmit={e => this.props.handleAdd(e, this.state)}>
+      <form onSubmit={this.handleAdd}>
         <label htmlFor="name">Name</label>
         <input
           type="text"
-          value={this.state.activeFriend.name || name}
+          value={name}
           name="name"
           placeholder="Name"
           id="name"
@@ -50,7 +48,7 @@ class FriendForm extends React.Component {
         <label htmlFor="age">Age</label>
         <input
           type="text"
-          value={this.state.activeFriend.age || age}
+          value={age}
           name="age"
           placeholder="Age"
           id="age"
@@ -59,13 +57,13 @@ class FriendForm extends React.Component {
         <label htmlFor="email">Email</label>
         <input
           type="text"
-          value={this.state.activeFriend.email || email}
+          value={email}
           name="email"
           placeholder="Email"
           id="email"
           onChange={this.handleChanges}
         />
-        <button>{this.state.activeFriend ? "Update" : "Submit"}</button>
+        <button>{"Submit"}</button>
       </form>
     );
   }
